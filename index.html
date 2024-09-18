@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clarkson Evans</title>
+    <link rel="stylesheet" href="stylesheets/theme.css">
+    <link rel='stylesheet' href='stylesheets/style.css'/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">    
+    <script src="javascripts/createMapMenu.js"></script>
+    <script src="javascripts/createEngMenu.js"></script>            
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<!-- Map -->    
+<div id="map">
+
+</div>
+
+<!-- Filter Values-->
+<input type="hidden" value="" id="day">
+<input type="hidden" value="" id="dateoffset">
+<input type="hidden" value="1" id="dayOnly">
+<input type="hidden" value="[]" id="branch">
+<input type="hidden" value='[]' id="user">
+<input type="hidden" value="" id="route">
+
+<script>    
+    var tasks 
+    var users      
+    var sh
+    var directionsRenderer
+
+    function filter(){
+        // clear the route directions
+        directionsRenderer.setMap(null);
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
+
+        // Refresh the markers
+        tasks.filter();           
+        users.filter();
+
+        //refresh the menus
+        if (document.getElementById("customerStatusButtonsContainer")) {
+            RefreshEngMenu(document.getElementById("customerStatusButtonsContainer"));
+        }
+
+        //refresh the map
+        map.setZoom(map.getZoom());
+
+    }
+
+    function initMap() {        
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {lat: 53.91727341958453, lng: -1.43348314155578},
+            zoom: 6,
+            disableDefaultUI: true
+        });  
+        directionsRenderer = new google.maps.DirectionsRenderer();      
+        directionsRenderer.setMap(map);
+
+        var script = document.createElement('script');
+        script.src = 'javascripts/markerClass.js';
+        script.onload = function() {
+            var script = document.createElement('script');
+            script.src = 'javascripts/zcla_clusters.js';
+            script.onload = function() {
+                tasks = new ZCLA_CLUSTERS();                             
+                for (let key in tasks.data) {
+                    tasks.data[key].markers["TASK"].setMap(map);                                                
+                }                             
+                var script = document.createElement('script');
+                script.src = 'javascripts/users.js';
+                script.onload = function() {
+                    users = new USERS();                       
+                    for (let i = 0; i < users.data.length; i++) {
+                        users.data[i].markers["USER"].setMap(map);                                                
+                    }  
+                    
+                    var script = document.createElement('script');
+                    script.src = 'javascripts/zcla_wkcomsh.js';
+                    script.onload = function() {
+                        sh = new ZCLA_WKCOMSCH(); 
+                        //create the day menu
+                        var centerControlDiv = document.createElement("div");
+                        var sideMenu = createMapMenu(centerControlDiv, map, new Date(sh.data[0].DAY1));
+
+                        centerControlDiv.index = 1;
+                        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);    
+                        monday = centerControlDiv.querySelector("#Mon")                    
+                        monday.click(); 
+
+                        //create the engineers menu
+                        var engControlDiv = document.createElement("div");
+                        engControlDiv.style.maxWidth = "16rem";
+                        var engMenu = createEngMenu(engControlDiv, map);
+
+                        engControlDiv.index = 1;
+                        map.controls[google.maps.ControlPosition.TOP_LEFT].push(engControlDiv);                    
+
+                        // Update the coordinates and zoom level:
+                        map.setCenter({lat: sh.data[0]["LAT"], lng: sh.data[0]["LONG"]}); // Set new coordinates
+                        map.setZoom(10); // Set new zoom level
+
+                        filter();
+
+                    };
+                    document.head.appendChild(script);                                   
+                };                               
+                document.head.appendChild(script);                                   
+            }; 
+            document.head.appendChild(script);
+        };
+        document.head.appendChild(script);
+    }
+</script>
+<script
+    async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCniAiZ8sDYVo-XbJGbbTfh8Hhw4UX1ZpA&callback=initMap">
+</script>
+
+</body>
+</html>

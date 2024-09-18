@@ -1,0 +1,49 @@
+body {
+  padding: 0px;
+  margin: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #d98200;
+}
+
+#map{
+  min-width: 100vh;
+  min-height: 100vh;
+}
+.circle-label {
+  background-color: red;
+  border-radius: 30%;
+  padding: 5px;
+  box-sizing: border-box;
+  display: inline;
+  margin-left: 20px;
+}
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*
+
+.button{
+  background: #ff911e;
+  border: #ff7700;
+}
+
+.button:hover{
+  background: #ff7700;
+  border: #ff7700;
+}
+
+.button:focus{
+  background: #ff7700;
+  border: #ff7700;
+}
+
+.button:active{
+  background: #ff7700;
+  border: #ff7700;
+}
+*/

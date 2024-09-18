@@ -1,0 +1,34 @@
+4 feeds
+	tasks(by days diff from selectecyed day for icon opaque)
+		infobox : open task in priority
+		infobox : Assign selected enineer
+	engineers(by scheduler)
+		marker home / branch?
+		marker van (integrate to live track w/ callback)
+		infobox  : Show tasks on day selected
+		sublevel : days (update from priority /w callback)
+			 : waypoints
+	Replenishment
+		marker 
+		icon Branch / Site
+		sublevel : Part qty avail.
+	scheduler
+		GET env
+        GET week number
+		GET Branch? as centre
+ 
+handlers
+	Add tasking
+	delete tasking?
+
+    custnotes types -> ZGEM_SOLARFIX = 'Y'
+    P_SCHEDULES P_BOOKED scheduled
+
+    CUSTNOTES.ZGCW_PANELNUMBER
+
+https://prioritydev.clarksonevans.co.uk/odata/priority/tabula.ini/fuld1/CUSTNOTESA?
+$select=CTYPENAME,ZGCW_PANELNUMBER,LAT,LONG,WBS,PLANNEDTIME,STATDES,CURDATE,CUSTNOTE
+&$filter=(CUSTNOTETYPEDES eq 'Solar Fix')
+and (PLANNEDTIME ne '0')
+and (STATDES eq 'P_Scheduled' OR STATDES eq 'P_Booked' OR STATDES eq 'Scheduled')
+and LAT ne 0 and LONG ne 0
