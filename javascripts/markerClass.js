@@ -87,6 +87,7 @@ class oDataClass {
                 // iterate through the items
                 for (let key in this.data) {
                     var item = this.data[key];
+                    this.data[key].markers = [];
                     this.setMarkers(item);
                 }
             } else {
